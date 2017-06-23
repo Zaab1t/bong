@@ -7,8 +7,9 @@
 
 
 __all__ = [
-    'terms_in_document',
     'DocumentVector',
+    'change_tokenizer',
+    'reset_tokenizer',
     'dot_product',
     'cosine_similarity',
     'vector_space_search',
@@ -17,16 +18,28 @@ __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
 
+from . import tokenize
 from collections import Counter
 from math import sqrt
 
 
-def terms_in_document(document):
-    """Return the terms in *document*.
+_tokenize = tokenize
 
-    :rtype: generator of strs.
+
+def change_tokenizer(new):
+    """Change the tokenizer used by :class:'DocumentVector'.
+
+    A tokenizer should accept a document and return an iterable of
+    tokens.
     """
-    return document.split()
+    global tokenize
+    tokenize = new
+
+
+def reset_tokenizer():
+    """Use the builtin tokenizer."""
+    global tokenize
+    tokenize = _tokenize
 
 
 class DocumentVector(Counter):
@@ -36,7 +49,7 @@ class DocumentVector(Counter):
     """
 
     def __init__(self, document):
-        super().__init__(terms_in_document(document))
+        super().__init__(tokenize(document))
         self.document = document
 
     @property
