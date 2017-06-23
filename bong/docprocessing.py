@@ -22,7 +22,7 @@ __license__ = 'MIT'
 
 from Stemmer import Stemmer
 import stop_words as stopwords
-from functools import lrucache
+from functools import lru_cache
 
 
 def tokenize(document):
