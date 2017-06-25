@@ -8,3 +8,4 @@ __license__ = 'MIT'
 from .bong import *
 from .docprocessing import *
 from .vectorsearch import *
+from .docutils import *
