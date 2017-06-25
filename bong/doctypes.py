@@ -37,7 +37,7 @@ class BaseDocument(metaclass=ABCMeta):
 
     @abstractmethod
     def __call__(self):
-        raise NotImplementedError
+        '''Implement me!'''
 
 
 class HtmlDocument(BaseDocument):
