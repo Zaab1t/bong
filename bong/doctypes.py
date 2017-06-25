@@ -2,7 +2,6 @@
 Document types!
 '''
 
-from collections.abc import Mapping
 from abc import ABCMeta, abstractmethod
 
 from collections import Counter
@@ -21,10 +20,16 @@ _BANNED_CHARS = _WHITESPACE + _PUNCTUATION
 
 
 class BaseDocument(metaclass=ABCMeta):
-    def __init__(self, zone_weights=None, zones=None, token_counter=None):
-        self.zone_weights = zone_weights
-        self.zones = zones
-        self.token_counter = token_counter
+    '''Base document type for preparing documents to be stored
+       in the database.
+
+       Subclasses must implement __call__ such that the subclass'
+       .__dict__ is appropriate for storage in mongodb.
+    '''
+    def __init__(self):
+        self.zone_weights = None
+        self.zones = None
+        self.token_counter = None
 
     def __contains__(self, x):
         return x in self.token_counter
@@ -33,6 +38,9 @@ class BaseDocument(metaclass=ABCMeta):
         return self.__dict__
 
     def modify_ranking(self, new_ranks):
+        '''Alter the weights of zone types for consideration
+        during vector search.
+        '''
         self.zone_weights.update(new_ranks)
 
     @abstractmethod
@@ -41,8 +49,16 @@ class BaseDocument(metaclass=ABCMeta):
 
 
 class HtmlDocument(BaseDocument):
-
+    '''The html document type for preparing html documents
+    for storage in mongodb.
+    '''
     def __call__(self, document, tag_ranking=None):
+        '''Accepts html in any format bs4 can soupify.
+        May be initialised with biasd html tag rankings to
+        influence searches.
+
+        :rtype: HtmlDocument
+        '''
         document = document.lower()
         soup = bs(document, 'html.parser')
         all_text = list(soup.text)
