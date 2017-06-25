@@ -5,6 +5,6 @@ __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
 
-#from .docprocessing import *
-#from .bong import *
+from .docprocessing import *
+from .bong import *
 from .docutils import *
