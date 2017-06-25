@@ -67,6 +67,11 @@ class HtmlDocument(BaseDocument):
         return self
 
     def simplify_html_data(self, document_data):
+        '''Lowercases the file and removes chars *generally*
+        not associated with normal phrasing.
+
+        :rtype: bs4 soup object, str
+        '''
         document_data = document_data.lower()
         soup = bs(document_data, 'html.parser')
         all_text = list(soup.text)
