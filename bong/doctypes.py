@@ -10,7 +10,7 @@ from string import whitespace, punctuation
 from bs4 import BeautifulSoup as bs
 
 
-__all__ = ['HtmlDocument']
+__all__ = ['BaseDocument', 'HtmlDocument']
 
 
 class BaseDocument(metaclass=ABCMeta):
