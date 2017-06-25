@@ -8,8 +8,6 @@
 
 __all__ = [
     'DocumentVector',
-    'change_tokenizer',
-    'reset_tokenizer',
     'dot_product',
     'cosine_similarity',
     'vector_space_search',
@@ -18,28 +16,8 @@ __author__ = 'Carl Bordum Hansen'
 __license__ = 'MIT'
 
 
-from . import tokenize
 from collections import Counter
 from math import sqrt
-
-
-_tokenize = tokenize
-
-
-def change_tokenizer(new):
-    """Change the tokenizer used by :class:'DocumentVector'.
-
-    A tokenizer should accept a document and return an iterable of
-    tokens.
-    """
-    global tokenize
-    tokenize = new
-
-
-def reset_tokenizer():
-    """Use the builtin tokenizer."""
-    global tokenize
-    tokenize = _tokenize
 
 
 class DocumentVector(Counter):
