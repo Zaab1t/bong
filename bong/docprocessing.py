@@ -5,14 +5,12 @@
     Provide the tools to prepare a given document for comparisons.
 
     This module exposes the following functions:
-        * tokenize -- split a document into its' terms.
         * stem_words -- strip word suffixes.
         * remove_stop_words -- remove common words of no semantic value.
 """
 
 
 __all__ = [
-    'tokenize',
     'stem_words',
     'remove_stop_words',
 ]
@@ -23,11 +21,6 @@ __license__ = 'MIT'
 from Stemmer import Stemmer
 import stop_words as stopwords
 from functools import lru_cache
-
-
-def tokenize(document):
-    """Return all the terms in *document*."""
-    return document.split()
 
 
 def stem_words(iterable, language='english'):
