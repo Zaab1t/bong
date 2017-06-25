@@ -23,7 +23,7 @@ class BaseDocument(metaclass=ABCMeta):
     '''Base document type for preparing documents to be stored
        in the database.
 
-       Subclasses must implement __call__ such that the subclass'
+       Subclasses must implement .tokenize such that the subclass'
        .__dict__ is appropriate for storage in mongodb.
     '''
     def __init__(self):
@@ -44,7 +44,7 @@ class BaseDocument(metaclass=ABCMeta):
         self.zone_weights.update(new_ranks)
 
     @abstractmethod
-    def __call__(self):
+    def tokenize(self):
         '''Implement me!'''
 
 
@@ -52,7 +52,7 @@ class HtmlDocument(BaseDocument):
     '''The html document type for preparing html documents
     for storage in mongodb.
     '''
-    def __call__(self, document, tag_ranking=None):
+    def tokenize(self, document, tag_ranking=None):
         '''Accepts html in any format bs4 can soupify.
         May be initialised with biasd html tag rankings to
         influence searches.

@@ -1,4 +1,4 @@
-__all__ = ['mdb_entry_maker']
+__all__ = ['document']
 
 
 def document(doc_type, document_data, **kwargs):
@@ -6,6 +6,5 @@ def document(doc_type, document_data, **kwargs):
 
     :rtype: doc_type
     '''
-    doc = doc_type()
-    doc(document_data, **kwargs)
+    doc = doc_type().tokenize(document_data, **kwargs)
     return doc
