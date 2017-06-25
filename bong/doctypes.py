@@ -13,12 +13,6 @@ from bs4 import BeautifulSoup as bs
 __all__ = ['HtmlDocument']
 
 
-_PUNCTUATION = punctuation.replace("'", '')
-_PUNCTUATION = _PUNCTUATION.replace("&", '')
-_WHITESPACE = whitespace.replace(' ', '')
-_BANNED_CHARS = _WHITESPACE + _PUNCTUATION
-
-
 class BaseDocument(metaclass=ABCMeta):
     '''Base document type for preparing documents to be stored
        in the database.
@@ -26,6 +20,7 @@ class BaseDocument(metaclass=ABCMeta):
        Subclasses must implement .tokenize such that the subclass'
        .__dict__ is appropriate for storage in mongodb.
     '''
+
     def __init__(self):
         self.zone_weights = None
         self.zones = None
@@ -52,35 +47,31 @@ class HtmlDocument(BaseDocument):
     '''The html document type for preparing html documents
     for storage in mongodb.
     '''
-    def tokenize(self, document, tag_ranking=None):
+    _PUNCTUATION = punctuation.replace("'", '')
+    _PUNCTUATION = _PUNCTUATION.replace("&", '')
+    _WHITESPACE = whitespace.replace(' ', '')
+    _BANNED_CHARS = _WHITESPACE + _PUNCTUATION
+
+    def tokenize(self, document_data, tag_ranking=None):
         '''Accepts html in any format bs4 can soupify.
         May be initialised with biasd html tag rankings to
         influence searches.
 
         :rtype: HtmlDocument
         '''
-        document = document.lower()
-        soup = bs(document, 'html.parser')
-        all_text = list(soup.text)
-        for i, char in enumerate(all_text):
-            if char in _BANNED_CHARS:
-                all_text[i] = ' '
-        all_text = ''.join(all_text)
+        soup, all_text = self.simplify_html_data(document_data)
         zones = dict()
-        for x in soup.find_all():
-            if x.string:
-                try:
-                    zones[x.name].update(x.string.split())
-                except KeyError:
-                    zones[x.name] = set(x.string.split())
         all_text = Counter(all_text.split(' '))
         del all_text['']
-        if tag_ranking:
-            zone_weights = {k: tag_ranking.setdefault(k, 0)
-                            for k in zones}
-        else:
-            zone_weights = {k: 0 for k in zones}
-        self.zone_weights = zone_weights
-        self.zones = zones
-        self.token_counter = all_text
+        self.token_counter = dict(all_text)
         return self
+
+    def simplify_html_data(self, document_data):
+        document_data = document_data.lower()
+        soup = bs(document_data, 'html.parser')
+        all_text = list(soup.text)
+        for i, char in enumerate(all_text):
+            if char in self._BANNED_CHARS:
+                all_text[i] = ' '
+        all_text = ''.join(all_text)
+        return soup, all_text
