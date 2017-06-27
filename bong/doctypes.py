@@ -10,7 +10,7 @@ from string import whitespace, punctuation
 from bs4 import BeautifulSoup as bs
 
 
-__all__ = ['BaseDocument', 'HtmlDocument']
+__all__ = ['BaseDocument', 'Query', 'HtmlDocument']
 
 
 class BaseDocument(metaclass=ABCMeta):
@@ -80,3 +80,9 @@ class HtmlDocument(BaseDocument):
                 all_text[i] = ' '
         all_text = ''.join(all_text)
         return soup, all_text
+
+
+class Query(BaseDocument):
+    def tokenize(self, document_data, tag_ranking=None):
+        self.token_counter = dict(Counter(document_data.split()))
+        return self

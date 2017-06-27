@@ -27,7 +27,7 @@ def magnitude(document):
 
     :rtype: float.
     """
-    return sqrt(sum(i**2 for i in document.token_counter.values()))
+    return sqrt(sum(i**2 for i in document['token_counter'].values()))
 
 
 def dot_product(doc1, doc2):
@@ -37,9 +37,9 @@ def dot_product(doc1, doc2):
 
     :rtype: int.
     """
-    v1 = doc1.token_counter
-    v2 = doc2.token_counter
-    return sum(count*v2[term] for term, count in v1.items())
+    v1 = doc1['token_counter']
+    v2 = doc2['token_counter']
+    return sum(count*v2.get(term, 0) for term, count in v1.items())
 
 
 def cosine_similarity(doc1, doc2):
