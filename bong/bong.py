@@ -26,6 +26,7 @@ def search(query, n):
     client = MongoClient()
     db = client['bong']
     collection = db['documents']
-    result = vector_space_search(query, collection.find())
-    for doc, similarity in islice(reversed(sorted(result)), n):
+    result = vector_space_search(query, *collection.find())
+    k = lambda x: x[1]
+    for doc, similarity in islice(reversed(sorted(result, key=k)), n):
         yield doc
