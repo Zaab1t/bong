@@ -12,7 +12,6 @@ __license__ = 'MIT'
 
 
 from pymongo import MongoClient
-from itertools import islice
 
 from .vectorsearch import vector_space_search
 
@@ -27,6 +26,6 @@ def search(query, n):
     db = client['bong']
     collection = db['documents']
     result = vector_space_search(query, *collection.find())
-    k = lambda x: x[1]
-    for doc, similarity in islice(reversed(sorted(result, key=k)), n):
+    def key(x): return x[1]
+    for doc, _ in sorted(result, key=key, reverse=True)[:n]:
         yield doc
