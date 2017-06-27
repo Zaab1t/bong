@@ -2,15 +2,14 @@
 Document types!
 '''
 
-from abc import ABCMeta, abstractmethod
+__all__ = ['BaseDocument', 'Query', 'HtmlDocument']
 
+
+from abc import ABCMeta, abstractmethod
 from collections import Counter
 from string import whitespace, punctuation
 
 from bs4 import BeautifulSoup as bs
-
-
-__all__ = ['BaseDocument', 'Query', 'HtmlDocument']
 
 
 class BaseDocument(metaclass=ABCMeta):

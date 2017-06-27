@@ -8,4 +8,5 @@ setup(
     author='Carl Bordum Hansen',
     license='MIT',
     packages=['bong'],
+    install_requires=['bs4', 'PyStemmer', 'stop_words', 'pymongo']
 )
